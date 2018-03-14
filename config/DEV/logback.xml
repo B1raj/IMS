@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<property name="LOG_HOME" value="." />
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{requestUUID}] %-5level %logger{36}  - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="FILE_APPENDER"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/IMS.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{requestUUID}] %-5level %logger{36} - %msg%n
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}/archived/IMSLog-%d{yyyy-MM-dd}.%i.log
+                        </fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			
+			<!-- keep 10 days worth of history , but at most 1GB -->
+        		<maxHistory>10</maxHistory>
+        		<totalSizeCap>5GB</totalSizeCap>
+        		
+		</rollingPolicy>
+
+	</appender>
+
+	<logger name="com.dbs.IMS" level="INFO" additivity="false">
+		<appender-ref ref="FILE_APPENDER" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<root level="debug">
+		<appender-ref ref="FILE_APPENDER" />
+		<appender-ref ref="STDOUT" /> 
+	</root>
+
+</configuration>
