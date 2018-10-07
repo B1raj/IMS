@@ -8,6 +8,7 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -29,7 +30,7 @@ public class RestClient {
 	@PostConstruct
 	public void init() {
 
-		TrustStratergy trustStratergy = (chain, authType) -> true;
+		TrustStrategy trustStratergy = (chain, authType) -> true;
 		allHostsValid = (String hostname, SSLSession session) -> true;
 
 		String trustStorePath = env.getRequiredProperty("security.host.truststore.path");
@@ -37,7 +38,7 @@ public class RestClient {
 
 		try {
 			sslcontext = SSLContexts.custom()
-					.loadTrustMaterial(new File(StringUtils.normalizedFilePath(trustStorePath)),
+					.loadTrustMaterial(new File(trustStorePath),
 							trustStorePwd.toCharArray(), trustStratergy)
 					.build();
 		} catch (final Exception e) {
