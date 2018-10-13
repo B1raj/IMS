@@ -44,7 +44,6 @@ public class RestClient {
 		} catch (final Exception e) {
 			System.out.println("Could not create SSLContext");
 		}
-		
 
 		client = new OkHttpClient.Builder().sslSocketFactory(sslcontext.getSocketFactory())
 				.hostnameVerifier(allHostsValid).connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS)).build();
